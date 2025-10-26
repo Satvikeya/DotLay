@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DotLay</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    
+
+    <style>
+        /* Removed universal font rule from body to default to Tailwind sans-serif */
+        body {
+            min-height: 100vh;
+        }
+        /* New style: Apply the Charter/Georgia-like font specifically to the title */
+        .dotlay-font {
+            font-family: "Charter", Georgia, serif;
+        }
+        /* Ensure the main content pushes the footer to the bottom */
+        .flex-container {
+            min-height: 100vh;
+        }
+        /* Style for the custom toast message */
+        #message-toast {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        #message-toast.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 flex flex-col flex-container relative">
+
+    <!-- Custom Message Toast (Replaces alerts) -->
+    <div id="message-toast" class="fixed top-5 right-5 z-50 p-4 bg-indigo-100 text-indigo-800 rounded-lg shadow-xl border border-indigo-300">
+        <div class="flex justify-between items-center">
+            <p id="toast-text" class="text-sm font-medium"></p>
+            <button onclick="hideMessage()" class="ml-4 text-indigo-600 hover:text-indigo-800 font-bold text-lg leading-none" aria-label="Close message">
+                &times;
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. Navbar/Header Section -->
+    <header class="sticky top-0 z-10 bg-white shadow-md p-4 flex justify-between items-center border-b border-gray-200">
+        <!-- App Title/Logo (Left) -->
+        <!-- The dotlay-font class is added here -->
+        <h1 class="text-3xl font-bold text-purple-700 dotlay-font">DotLay</h1>
+
+        <!-- User Actions (Right) -->
+        <div class="flex items-center space-x-4">
+            <!-- New Convo Button -->
+            <button
+                id="new-convo-btn"
+                class="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition duration-150 shadow-md"
+            >
+                New Convo
+            </button>
+
+            <!-- Username (Extreme Right) -->
+            <div
+                class="flex items-center space-x-2 p-1.5 rounded-full bg-gray-100 cursor-pointer hover:bg-gray-200 transition duration-150"
+            >
+                <div id="user-initial"
+                    class="flex items-center justify-center w-8 h-8 rounded-full bg-indigo-500 text-white text-sm font-semibold"
+                >
+                    J
+                </div>
+                <span id="username-display"
+                    class="hidden sm:inline text-gray-800 text-sm font-medium pr-1"
+                >
+                    josyu
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Main Content Area -->
+    <main class="flex-grow flex flex-col justify-center items-center p-8">
+        <div class="text-center mb-10 w-full max-w-4xl">
+            <!-- Centered Greeting -->
+            <p class="text-3xl sm:text-4xl font-light text-gray-700 tracking-tight">
+                Hello, <span id="greeting-username" class="font-bold text-indigo-600">josyu</span>!
+            </p>
+            <p class="mt-2 text-gray-500 text-lg">
+                Ask a question and see the consensus from Gemini, ChatGPT, and Claude.
+            </p>
+        </div>
+
+        <!-- Placeholder for conversation history -->
+        <div
+            class="flex-grow w-full max-w-4xl bg-white p-6 rounded-xl shadow-inner border border-gray-100 overflow-y-auto mb-6 h-96"
+        >
+            <p class="text-center text-gray-400 mt-10">
+                Your conversation history will appear here.
+            </p>
+        </div>
+    </main>
+
+    <!-- 3. Input Box Section (Fixed at bottom for chat experience) -->
+    <footer class="w-full bg-white border-t border-gray-200 p-4 sticky bottom-0">
+        <div class="max-w-4xl mx-auto">
+            <form id="chat-form" class="flex space-x-3">
+                <input
+                    type="text"
+                    id="input-text"
+                    placeholder="Start the convo here"
+                    class="flex-grow p-4 border border-gray-300 text-gray-800 rounded-3xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 shadow-md outline-none"
+                />
+                <button
+                    type="submit"
+                    id="send-button"
+                    class="p-4 h-full bg-indigo-600 text-white rounded-3xl shadow-lg hover:bg-indigo-700 transition duration-150 disabled:bg-indigo-300 disabled:cursor-not-allowed"
+                    disabled
+                >
+                    <!-- Send/Arrow Icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transform rotate-90">
+                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 00.149.736l3.32 1.328a1 1 0 00.74-.066L10 18l5.965 1.551a1 1 0 00.74.066l3.32-1.328a1 1 0 00.15-.736l-7-14z" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </footer>
+
+    <script>
+        // Mock user data for dynamic rendering
+        const USERNAME = "josyu"; 
+        
+        // --- Custom Message Toast Logic ---
+        const toastEl = document.getElementById('message-toast');
+        const toastText = document.getElementById('toast-text');
+        let toastTimeout;
+
+        function showMessage(text) {
+            clearTimeout(toastTimeout);
+            toastText.textContent = text;
+            toastEl.classList.add('show');
+            toastTimeout = setTimeout(hideMessage, 4000);
+        }
+
+        function hideMessage() {
+            toastEl.classList.remove('show');
+        }
+
+        // --- UI Initialization and Event Handlers ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Dynamic User Info Rendering
+            document.getElementById('user-initial').textContent = USERNAME.charAt(0).toUpperCase();
+            document.getElementById('username-display').textContent = USERNAME;
+            document.getElementById('greeting-username').textContent = USERNAME;
+
+            // 2. New Convo Button Handler
+            document.getElementById('new-convo-btn').addEventListener('click', () => {
+                showMessage('Starting a new conversation! (Feature not yet fully implemented)');
+            });
+
+            const inputEl = document.getElementById('input-text');
+            const sendBtn = document.getElementById('send-button');
+            const chatForm = document.getElementById('chat-form');
+
+            // 3. Input validation to enable/disable button
+            inputEl.addEventListener('input', () => {
+                sendBtn.disabled = inputEl.value.trim() === '';
+            });
+
+            // 4. Form Submission Handler
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const prompt = inputEl.value.trim();
+                
+                if (prompt) {
+                    // Simulate the message being sent to the backend
+                    showMessage(`Sending message: "${prompt}" to the AI orchestrator...`);
+                    
+                    // Clear input and disable button
+                    inputEl.value = '';
+                    sendBtn.disabled = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

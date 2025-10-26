@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Charter&display=swap');
+
+.dotlay-font {
+  font-family: "Charter", Georgia, serif;
+}
+
+.register-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;  /* keeps page stagnant */
+  background-color: #faf7f0; /* ✅ beige background */
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* Root container */
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;       
+  width: 100vw;
+  overflow: hidden;
+}
+
+
+.register-card {
+  background: #fff;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 380px;
+  transition: transform 0.2s ease;
+}
+
+.register-card:hover {
+  transform: translateY(-3px);
+}
+
+.register-title {
+  margin: 0;
+  font-size: 1.75rem;
+  text-align: center;
+  color: #333;
+  font-weight: 600;
+}
+
+.register-subtitle {
+  margin-top: 0.3rem;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #666;
+}
+
+.register-form .form-group {
+  margin-bottom: 1.3rem;
+}
+
+.register-form label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.4rem;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  font-size: 0.95rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.5rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.register-form input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+.success-message {
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #bcfaca;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.error-message {
+  color: #d9534f;
+  background: rgba(217, 83, 79, 0.1);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Button */
+.register-btn {
+  width: 100%;
+  padding: 0.9rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: #007bff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.register-btn:hover {
+  background: #005fcc;
+  transform: translateY(-1px);
+}
+
+/* Ensures the response box is always same initial height */
+.response-container {
+  height: 250px; /* ✅ Set fixed height you like */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Internal scrolling when response exceeds height */
+.response-scroll {
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px; /* Prevent scrollbar overlap */
+}
